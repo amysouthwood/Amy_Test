@@ -1,5 +1,5 @@
 view: orders {
-  sql_table_name: demo_db.orders ;;
+  sql_table_name: public.orders ;;
 
   dimension: id {
     primary_key: yes
@@ -16,10 +16,13 @@ view: orders {
       week,
       month,
       quarter,
-      year
+      year,
+      hour_of_day
     ]
     sql: ${TABLE}.created_at ;;
   }
+
+
 
   dimension: status {
     type: string
@@ -36,4 +39,16 @@ view: orders {
     type: count
     drill_fields: [id, users.last_name, users.first_name, users.id, order_items.count]
   }
+
+  measure:  formatted_count {
+    type: count
+    html: {% if value < 5000 %}
+          <p style="color: white; background-color: darkred; margin: 0; text-align:center">{{ rendered_value }}</p>
+          {% else %}
+          <p style="color: white; background-color: darkgreen; margin: 0; text-align:center">{{ rendered_value }}</p>
+          {% endif %}
+
+    ;;
+  }
+
 }
