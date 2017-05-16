@@ -6,11 +6,16 @@ view: products {
     type: number
     sql: ${TABLE}.id ;;
   }
+  dimension: cost {
+    type: number
+    value_format_name: usd
+    sql: ${TABLE}.cost ;;
+  }
 
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
-    drill_fields: [category, item_name]
+    drill_fields: [category, name]
     link: {
       label: "Google link"
       url: "https://www.google.co.uk/#q={{ value }}&*"
@@ -50,9 +55,9 @@ view: products {
     sql: ${TABLE}.department ;;
   }
 
-  dimension: item_name {
+  dimension:  name {
     type: string
-    sql: ${TABLE}.item_name ;;
+    sql: ${TABLE}.name ;;
   }
 
   dimension: rank {
@@ -71,9 +76,15 @@ view: products {
     sql: ${TABLE}.sku ;;
   }
 
+  dimension: distribution_center_id {
+    type: string
+    sql: ${TABLE}.distribution_center_id ;;
+    hidden: yes
+  }
+
   measure: count {
     type: count
-    drill_fields: [id, item_name, inventory_items.count]
+    drill_fields: [id, name, inventory_items.count]
   }
 
 }

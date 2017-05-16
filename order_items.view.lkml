@@ -7,15 +7,43 @@ view: order_items {
     sql: ${TABLE}.id ;;
   }
 
+  dimension_group: order_created {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.created_at ;;
+  }
+
+
+  dimension_group: delivered {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.delivered_at ;;
+  }
+
   dimension: inventory_item_id {
     type: number
-    hidden: yes
+    # hidden: yes
     sql: ${TABLE}.inventory_item_id ;;
   }
 
   dimension: order_id {
     type: number
-    hidden: yes
     sql: ${TABLE}.order_id ;;
   }
 
@@ -33,32 +61,69 @@ view: order_items {
     sql: ${TABLE}.returned_at ;;
   }
 
+  dimension: is_returned {
+    type: yesno
+    sql: ${returned_date} is not NULL ;;
+  }
+
   dimension: sale_price {
-    hidden:  yes
     type: number
     sql: ${TABLE}.sale_price ;;
   }
 
+  dimension_group: shipped {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.shipped_at ;;
+  }
+
+  dimension: status {
+    type: string
+    sql: ${TABLE}.status ;;
+  }
+
+  dimension: user_id {
+    type: number
+    # hidden: yes
+    sql: ${TABLE}.user_id ;;
+  }
+
   measure: count {
     type: count
-    drill_fields: [id, inventory_items.id, orders.id]
+    drill_fields: [detail*]
   }
 
-  measure: total_sale_price{
-    type:  sum
-    sql:  ${sale_price} ;;
+  measure: order_count {
+    type: count_distinct
+    sql: ${order_id} ;;
   }
 
-  measure: cumulative_total_sale_price {
-    type:  running_total
-    sql: ${total_sale_price} ;;
+  measure: user_count {
+    type: count_distinct
+    sql: ${user_id} ;;
   }
 
-  measure:  avg_sale_price {
+  measure: total_sale_price {
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price} ;;
+    drill_fields: [detail*]
+  }
+
+  measure: average_sale_price {
     type: average
-    sql:  ${sale_price} ;;
+    value_format_name: usd
+    sql: ${sale_price} ;;
+    drill_fields: [detail*]
   }
-
 
   measure: total_gross_revenue {
     type: sum
@@ -69,22 +134,21 @@ view: order_items {
     }
   }
 
-  dimension: is_returned {
-    type: yesno
-    sql: ${returned_date} is not NULL ;;
+  measure: average_spend_per_user {
+    type: number
+    value_format_name: usd
+    sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
   }
 
-  measure: count_returned {
-    type:  count
-    filters: {
-      field: returned_date
-      value: "-NULL"
-    }
+  # ----- Sets of fields for drilling ------
+  set: detail {
+    fields: [
+      id,
+      users.id,
+      users.first_name,
+      users.last_name,
+      inventory_items.id,
+      inventory_items.product_name
+    ]
   }
-
-#  measure: item_return_rate {
-#    type: number
-#    sql: 100*(${count_returned}/NULLIF(${count},0)) ;;
-#    value_format: "0.000;0.000"
-#  }
 }

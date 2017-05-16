@@ -1,12 +1,12 @@
 view: order_user_sequence {
   derived_table: {
     sql: select user_id
-      , orders.id as orders_id
+      , order_id as orders_id
       , created_at
       , ROW_NUMBER() Over (Partition by user_id Order by created_at) as sequence_num
       , LAG(created_at) Over( Partition by user_id Order by created_at) as prev_created_at
       , LEAD (created_at) Over( Partition by user_id Order by created_at) as next_created_at
-      from orders
+      from order_items
       group by 1,2,3
  ;;
   }

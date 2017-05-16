@@ -8,7 +8,6 @@ view: inventory_items {
   }
 
   dimension: cost {
-    hidden: yes
     type: number
     sql: ${TABLE}.cost ;;
   }
@@ -22,15 +21,51 @@ view: inventory_items {
       week,
       month,
       quarter,
-      year
+      year,
+      month_name
     ]
     sql: ${TABLE}.created_at ;;
+  }
+
+  dimension: product_brand {
+    type: string
+    sql: ${TABLE}.product_brand ;;
+  }
+
+  dimension: product_category {
+    type: string
+    sql: ${TABLE}.product_category ;;
+  }
+
+  dimension: product_department {
+    type: string
+    sql: ${TABLE}.product_department ;;
+  }
+
+  dimension: product_distribution_center_id {
+    type: number
+    sql: ${TABLE}.product_distribution_center_id ;;
   }
 
   dimension: product_id {
     type: number
     # hidden: yes
     sql: ${TABLE}.product_id ;;
+  }
+
+  dimension: product_name {
+    type: string
+    sql: ${TABLE}.product_name ;;
+  }
+
+  dimension: product_retail_price {
+    type: number
+    sql: ${TABLE}.product_retail_price ;;
+  }
+
+  dimension: product_sku {
+    type: string
+    sql: ${TABLE}.product_sku ;;
   }
 
   dimension_group: sold {

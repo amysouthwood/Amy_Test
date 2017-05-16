@@ -1,51 +1,24 @@
 view: user_lifetime_data {
-  #correct derived table
-#   derived_table: {
-#     sql: with agg as (select users.id as "user_id"
-#       , count(distinct orders.id) as "order_count"
-#       , sum(order_items.sale_price) as "total_revenue"
-#       , min(orders.created_at) as "first_order"
-#       , max(orders.created_at) as "last_order"
-#       from users
-#       inner join orders
-#       on users.id = orders.user_id
-#       inner join order_items
-#       on orders.id = order_items.order_id
-#       group by users.id)
-#
-#       Select * from agg
-#       left join orders
-#       on agg.user_id = orders.user_id
-#       left join order_items
-#       on orders.id  = order_items.order_id
-#       left join inventory_items
-#       on order_items.inventory_item_id = inventory_items.id
-#       left join products
-#       on inventory_items.product_id = products.id
-#        ;;
+
+  derived_table: {
+    sql: (select order_items.user_id as "user_id"
+      , users.created_at as "signup"
+        , COUNT(DISTINCT order_items.order_id) as order_count
+        , SUM(order_items.sale_price) AS total_revenue
+        , MIN(NULLIF(order_items.created_at,0)) as first_order
+        , MAX(NULLIF(order_items.created_at,0)) as last_order
+        , COUNT(DISTINCT DATE_TRUNC('month', NULLIF(order_items.created_at,0))) as number_of_distinct_months_with_orders
+      FROM order_items
+      inner join users
+      on users.id = order_items.user_id
+      group by order_items.user_id, users.created_at)
+       ;;
 #     sql_trigger_value: Select CURRENT_DATE ;;
 #     sortkeys: ["user_id"]
 #     distribution_style: all
-#   }
-
-  derived_table: {
-    sql: (select users.id as "user_id"
-      , users.created_at as "signup"
-      , count(distinct orders.id) as "order_count"
-      , sum(order_items.sale_price) as "total_revenue"
-      , min(orders.created_at) as "first_order"
-      , max(orders.created_at) as "last_order"
-      from users
-      inner join orders
-      on users.id = orders.user_id
-      inner join order_items
-      on orders.id = order_items.order_id
-      group by users.id, users.created_at)
-       ;;
-    sql_trigger_value: Select CURRENT_DATE ;;
-    sortkeys: ["user_id"]
-    distribution_style: all
   }
+
+
 
   measure: count {
     hidden:  yes

@@ -1,21 +1,16 @@
 connection: "redlook"
 
 include: "*.view.lkml"         # include all views in this project
-include: "*.dashboard.lookml"  # include all dashboards in this project
+include: "-redshift_*.dashboard.lookml"  # include all dashboards in this project
 
 ############# Order Items Explore #################
 explore: order_items {
   description: "Detailed order information"
   label: "Order Items"
-  join: orders{
-    type:  inner
-    relationship: many_to_one
-    sql_on: ${order_items.order_id} = ${orders.id} ;;
-  }
   join: users {
     type:  inner
     relationship:  many_to_one
-    sql_on: ${orders.user_id} =  ${users.id}  ;;
+    sql_on: ${order_items.user_id} =  ${users.id}  ;;
   }
 
   join: inventory_items {
@@ -30,12 +25,6 @@ explore: order_items {
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
   }
 
-  join: product_facts {
-    type: inner
-    relationship: one_to_one
-    sql_on: ${products.id} = ${product_facts.product_id} ;;
-  }
-
 }
 
 ############# User Lifetime Order Data #################
@@ -43,15 +32,10 @@ explore: user_lifetime_order {
   description: "User Lifetime Order"
   view_name: order_items
   from: order_items
-  join: orders{
-    type:  inner
-    relationship: many_to_one
-    sql_on: ${order_items.order_id} = ${orders.id} ;;
-  }
   join: users {
     type:  inner
     relationship:  many_to_one
-    sql_on: ${orders.user_id} =  ${users.id}  ;;
+    sql_on: ${order_items.user_id} =  ${users.id}  ;;
   }
 
   join:  user_lifetime_data {
@@ -78,6 +62,7 @@ explore: user_lifetime_order {
 explore: compare_brands {
   description: "Compare Brands"
   label: "Compare Brands"
+  fields: [-order_items.average_spend_per_user]
   conditionally_filter: {
     filters: {
       field: brand_comparison.category
@@ -87,11 +72,6 @@ explore: compare_brands {
   }
   view_name: order_items
   from: order_items
-  join: orders{
-    type:  inner
-    relationship: many_to_one
-    sql_on: ${order_items.order_id} = ${orders.id} ;;
-  }
 
   join: inventory_items {
     type: inner
