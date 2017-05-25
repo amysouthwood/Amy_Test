@@ -36,6 +36,11 @@ view: users {
     sql: ${TABLE}.created_at ;;
   }
 
+  dimension: created_filter {
+    type: date
+    sql: CASE WHEN ${created_date} > DATE_ADD(${created_date}, INTERVAL -30 DAY) THEN ${created_date} END ;;
+  }
+
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;

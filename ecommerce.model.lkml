@@ -8,6 +8,8 @@ include: "*.dashboard"
 
 
 explore: order_items {
+  from: order_items #required parameter to be able to extend
+  view_name: order_items #required parameter to be able to extend
   join: inventory_items {
     type: left_outer
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
@@ -34,7 +36,26 @@ explore: order_items {
 }
 
 
-explore: products {}
+#extended explore example
+explore: extend_order_items {
+  extends: [order_items]
+  join: users {
+    type:  inner
+    sql_on: ${orders.user_id} = ${users.id} ;;
+    relationship: one_to_one
+  }
+}
+
+
+explore: products {
+  conditionally_filter: {
+    filters: {
+      field: products.category
+      value: "Accessories"
+    }
+    unless: [products.brand]
+  }
+}
 
 
 explore: user_data {
@@ -45,4 +66,12 @@ explore: user_data {
   }
 }
 
-explore: users {}
+explore: users {
+#   always_filter: {
+#     filters: {
+#       field: created_date
+#       value: "30 days ago"
+#
+#     }
+#   }
+}
