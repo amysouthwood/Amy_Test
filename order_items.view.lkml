@@ -116,6 +116,10 @@ view: order_items {
     value_format_name: usd
     sql: ${sale_price} ;;
     drill_fields: [detail*]
+    link: {
+      label: "db test"
+      url: "/dashboards/2?Category={{ products.category._value }}"
+    }
   }
 
   measure: average_sale_price {

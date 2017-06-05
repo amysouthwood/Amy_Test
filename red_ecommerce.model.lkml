@@ -1,7 +1,7 @@
 connection: "redlook"
 
 include: "*.view.lkml"         # include all views in this project
-include: "-redshift_*.dashboard.lookml"  # include all dashboards in this project
+include: "order_*.dashboard.lookml"  # include all dashboards in this project
 
 ############# Order Items Explore #################
 explore: order_items {
@@ -30,6 +30,10 @@ explore: order_items {
 ############# User Lifetime Order Data #################
 explore: user_lifetime_order {
   description: "User Lifetime Order"
+#   access_filter: {
+#     field: products.brand
+#     user_attribute: "brand"
+#   }
   view_name: order_items
   from: order_items
   join: users {
@@ -63,6 +67,7 @@ explore: compare_brands {
   description: "Compare Brands"
   label: "Compare Brands"
   fields: [-order_items.average_spend_per_user]
+
   conditionally_filter: {
     filters: {
       field: brand_comparison.category

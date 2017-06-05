@@ -18,7 +18,7 @@ view: products {
     drill_fields: [category, name]
     link: {
       label: "Google link"
-      url: "https://www.google.co.uk/#q={{ value }}&*"
+      url: "https://www.google.co.uk/#q={{ order_items.user_id._value }}"
     }
     link: {
       label: "website link"

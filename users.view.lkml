@@ -74,8 +74,11 @@ view: users {
   dimension: full_name {
     type:  string
     sql:  ${first_name} || ' ' || ${last_name} ;;
+    link: {
+      label: "Google link"
+      url: "https://www.google.co.uk/#q={{ order_items.user_id._value }}"
+    }
   }
-
 
 
   dimension: state {
@@ -149,6 +152,7 @@ view: users {
     sql: ${order_items.total_sale_price}/NULLIF(${count},0) ;;
     drill_fields: [age_tier,gender,avg_spend_per_user]
   }
+
 
   # ----- Sets of fields for drilling ------
   set: detail {
