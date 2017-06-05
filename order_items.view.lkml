@@ -152,7 +152,9 @@ view: order_items {
       users.first_name,
       users.last_name,
       inventory_items.id,
-      inventory_items.product_name
+      inventory_items.product_name,
+      total_sale_price
+
     ]
   }
 }

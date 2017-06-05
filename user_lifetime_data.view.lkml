@@ -13,9 +13,9 @@ view: user_lifetime_data {
       on users.id = order_items.user_id
       group by order_items.user_id, users.created_at)
        ;;
-#     sql_trigger_value: Select CURRENT_DATE ;;
-#     sortkeys: ["user_id"]
-#     distribution_style: all
+    sql_trigger_value: Select CURRENT_DATE ;;
+    sortkeys: ["user_id"]
+    distribution_style: all
   }
 
 
