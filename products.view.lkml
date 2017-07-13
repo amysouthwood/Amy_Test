@@ -66,7 +66,7 @@ view: products {
   }
 
   dimension: retail_price {
-    hidden: yes
+    #hidden: yes
     type: number
     sql: ${TABLE}.retail_price ;;
   }
@@ -80,6 +80,11 @@ view: products {
     type: string
     sql: ${TABLE}.distribution_center_id ;;
     hidden: yes
+  }
+
+  measure: average_price {
+    type: average
+    sql: ${retail_price} ;;
   }
 
   measure: count {

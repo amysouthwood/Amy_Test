@@ -13,9 +13,10 @@ view: user_lifetime_data {
       on users.id = order_items.user_id
       group by order_items.user_id, users.created_at)
        ;;
-    sql_trigger_value: Select CURRENT_DATE ;;
-    sortkeys: ["user_id"]
-    distribution_style: all
+#     datagroup_trigger: user_facts_etl
+#     sql_trigger_value: Select CURRENT_DATE ;; ### still valid but old way
+#     sortkeys: ["user_id"]
+#     distribution_style: all
   }
 
 
@@ -55,6 +56,7 @@ view: user_lifetime_data {
     sql: ${TABLE}.order_count ;;
   }
 
+
   measure: order_cnt {
     type: sum
     sql: ${order_count} ;;
@@ -76,6 +78,17 @@ view: user_lifetime_data {
     sql: ${order_count} ;;
   }
 
+#   measure: order_count_tier_measure {
+#     type: number
+#     sql: CASE WHEN ${order_cnt} < 10 then 0
+#         When ${order_cnt} < 100 then 1
+#         When ${order_cnt} < 500 then 2
+#         else 3
+#         end;;
+#   }
+
+
+
   dimension: weekday_tier {
     type: tier
     tiers: [4]
@@ -92,6 +105,11 @@ view: user_lifetime_data {
     hidden: yes
     type: number
     sql: ${TABLE}.total_revenue ;;
+  }
+
+  dimension: total_revenue_first_purchase {
+    type: number
+    sql: Case when {order_user_sequence.is_first_purchase} then ${total_revenue} end ;;
   }
 
   measure: total_rev {

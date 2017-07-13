@@ -71,6 +71,7 @@ view: order_items {
     sql: ${TABLE}.sale_price ;;
   }
 
+
   dimension_group: shipped {
     type: time
     timeframes: [

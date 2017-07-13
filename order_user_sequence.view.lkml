@@ -1,3 +1,5 @@
+explore:  order_user_sequence {}
+
 view: order_user_sequence {
   derived_table: {
     sql: select user_id
@@ -16,6 +18,7 @@ view: order_user_sequence {
     type: count
     drill_fields: [detail*]
   }
+
 
   dimension: user_id {
     hidden: no
@@ -47,6 +50,11 @@ view: order_user_sequence {
   dimension: sequence_num {
     type: number
     sql: ${TABLE}.sequence_num ;;
+  }
+
+  dimension: is_first_order {
+    type: yesno
+    sql: ${sequence_num} = 1 ;;
   }
 
   dimension_group: prev_created_at {
