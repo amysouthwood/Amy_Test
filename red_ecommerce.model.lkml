@@ -26,8 +26,8 @@ persist_with: default
 
 ############# Order Items Explore #################
 explore: order_items {
-#  sql_always_where: ${order_created_date} > '2017-01-01';;
-#  sql_always_having: ${total_sale_price} > 20 ;;
+#  sql_always_where: ${order_created_date} >= '2017-01-01';;
+#  sql_always_having: ${total_sale_price} > 100 ;;
   description: "Detailed order information"
   label: "Order Items"
   join: users {
@@ -158,4 +158,10 @@ explore: products_string {
     relationship: one_to_many
     sql_where: ${word2.name} <> '' AND ${word.name} <> ${word2.name} ;;
   }
+}
+
+explore: users {
+  from: users #required parameter to be able to extend
+  view_name: users #required parameter to be able to extend
+  extension: required
 }

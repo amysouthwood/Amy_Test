@@ -30,6 +30,7 @@ view: brand_comparison {
 
 
 filter: brand_select {
+  description: "use this for comparitor fields only"
   suggest_dimension: brand
   type: string
 }
@@ -50,9 +51,9 @@ filter: category_select {
 
   dimension: brand_comparitor {
     description: "Compare a selected brand vs other brands in the category vs all other brands"
-    sql: Case When {% condition brand %} brand {% endcondition %}
+    sql: Case When {% condition brand_select %} brand {% endcondition %}
             THEN ${brand}
-            WHEN {% condition category %} category {% endcondition %}
+            WHEN {% condition category_select %} category {% endcondition %}
             THEN ${category}
             ELSE 'All other brands'
             END;;

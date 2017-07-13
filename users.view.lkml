@@ -129,7 +129,7 @@ view: users {
   measure:formatted_count{
     type:count
     html:
-    {% if value > 100 %}
+    {% if value > 10000 %}
     <font color="darkgreen">{{ rendered_value }}</font>
     {% endif %};;
   }
