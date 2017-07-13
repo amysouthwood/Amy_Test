@@ -112,9 +112,9 @@ view: users {
   dimension: formatted_gender {
     sql: ${TABLE}.gender;;
     html:
-    {% if value == 'f' %}
+    {% if value == 'Female' %}
     <p style="color: black; background-color: lightblue; font-size:100%; text-align:center">{{ rendered_value }}</p>
-    {% elsif value == 'm' %}
+    {% elsif value == 'Male' %}
     <p style="color: black; background-color: lightgreen; font-size:100%; text-align:center">{{ rendered_value }}</p>
     {% else %}
     <p style="color: black; background-color: orange; font-size:100%; text-align:center">{{ rendered_value }}</p>
