@@ -2,7 +2,9 @@ view: user_lifetime_data {
 
   derived_table: {
     sql: (select order_items.user_id as "user_id"
-      , users.created_at as "signup"
+        , users.gender as "gender"
+        , users.created_at as "signup"
+        , users.age as "age"
         , COUNT(DISTINCT order_items.order_id) as order_count
         , SUM(order_items.sale_price) AS total_revenue
         , MIN(NULLIF(order_items.created_at,0)) as first_order
@@ -11,7 +13,7 @@ view: user_lifetime_data {
       FROM order_items
       inner join users
       on users.id = order_items.user_id
-      group by order_items.user_id, users.created_at)
+      group by order_items.user_id, users.gender, users.age, users.created_at)
        ;;
 #     datagroup_trigger: user_facts_etl
 #     sql_trigger_value: Select CURRENT_DATE ;; ### still valid but old way
@@ -31,6 +33,18 @@ view: user_lifetime_data {
     primary_key: yes
     type: number
     sql: ${TABLE}.user_id ;;
+  }
+
+  dimension: gender {
+    hidden: yes
+    type: string
+    sql: ${TABLE}.gender ;;
+  }
+
+  dimension: age {
+    hidden: yes
+    type: string
+    sql: ${TABLE}.age ;;
   }
 
 

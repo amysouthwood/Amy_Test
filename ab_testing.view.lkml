@@ -15,7 +15,7 @@ view: ab_testing {
   dimension: a_b {
   type: yesno
   sql: {% condition a_b_gender %} gender {% endcondition %}
-  --AND {% condition a_b_age %} age {% endcondition %}
+        AND {% condition a_b_age %} age {% endcondition %}
   ;;
   }
 

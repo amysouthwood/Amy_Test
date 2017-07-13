@@ -128,10 +128,13 @@ explore: compare_brands {
   }
 }
 
+
+
 ############## AB Testing ########################
 explore: ab_testing {
-  fields: [ALL_FIELDS*,-users.avg_spend_per_user,
-    -users.count_users_returned]
+  fields: [ALL_FIELDS*
+          ,-users.avg_spend_per_user
+          ,-users.count_users_returned]
   join: users {
     type: inner
     sql_on: ${ab_testing.id} = ${users.id} ;;
