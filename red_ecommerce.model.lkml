@@ -13,16 +13,8 @@ datagroup: user_facts_etl {
   sql_trigger: SELECT max(ID) FROM etl_jobs ;;
 }
 
-datagroup: user_facts_1 {
-  sql_trigger: SELECT max(user_id) FROM ${user_facts_pdt_1.SQL_TABLE_NAME} ;;
-}
-
-datagroup: user_facts_2 {
-  sql_trigger: SELECT max(user_id) FROM ${user_facts_pdt_2.SQL_TABLE_NAME} ;;
-}
-
 ## model level caching ##
-persist_with: default
+# persist_with: default
 
 ############# Order Items Explore #################
 explore: order_items {
@@ -66,7 +58,7 @@ explore: order_items {
 
 ############# User Lifetime Order Data #################
 explore: user_lifetime_order {
-#  persist_with: user_facts_2
+#  persist_with: user_facts_etl
 #   persist_for: "6 hours"  #### still valid but old way
   description: "User Lifetime Order"
   access_filter: {
