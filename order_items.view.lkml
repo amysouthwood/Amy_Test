@@ -117,11 +117,67 @@ view: order_items {
     value_format_name: usd
     sql: ${sale_price} ;;
     drill_fields: [detail*]
-    link: {
-      label: "db test"
-      url: "/dashboards/2?Category={{ products.category._value }}"
+#     link: {
+#       label: "db test"
+#       url: "/dashboards/2?Category={{ products.category._value }}"
+#     }
+  }
+
+
+  dimension: is_30_days_new {
+    type: yesno
+    sql: ${order_created_raw} >= {% date_start start_date_filter %} ;;
+  }
+
+filter: start_date_filter{
+  type: date
+}
+
+  dimension: is_30_days {
+    type: yesno
+    sql: ${order_created_raw} > DATEADD(day,-29,{% date_start start_date_filter %}) ;;
+  }
+
+dimension: is_prev_30_days {
+  type: yesno
+  sql: ${order_created_raw} <= DATEADD(day,-29,{% date_start start_date_filter %})
+      AND ${order_created_raw} > DATEADD(day,-59,{% date_start start_date_filter %})
+  ;;
+}
+
+
+  measure: 30_day_total_sale_price {
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price};;
+    filters: {
+      field: is_30_days
+      value: "yes"
+    }
+}
+
+  measure: Prev_30_day_total_sale_price_start {
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price};;
+    filters: {
+      field: is_prev_30_days
+      value: "yes"
     }
   }
+  dimension: reporting_period {
+    sql: CASE
+        WHEN datediff(day,${order_created_raw},current_date) < 30
+        THEN 'Last 30 days'
+
+        WHEN datediff(day,${order_created_raw},current_date) >= 30
+        and datediff(day,${order_created_raw},current_date) < 60
+        THEN 'Previous Last 30 days'
+
+      END
+       ;;
+  }
+
 
   measure: average_sale_price {
     type: average

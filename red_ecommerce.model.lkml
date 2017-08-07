@@ -11,6 +11,7 @@ datagroup: default {
 
 datagroup: user_facts_etl {
   sql_trigger: SELECT max(ID) FROM etl_jobs ;;
+  max_cache_age: "24 hours"
 }
 
 ## model level caching ##
@@ -22,6 +23,7 @@ explore: order_items {
 #  sql_always_having: ${total_sale_price} > 100 ;;
   description: "Detailed order information"
   label: "Order Items"
+
   join: users {
     type:  inner
     relationship:  many_to_one
@@ -103,6 +105,7 @@ explore: user_lifetime_order {
 explore: compare_brands {
   description: "Compare Brands"
   label: "Compare Brands"
+ # sql_always_where: ${inventory_items.product_name} = {% parameter brand_comparison.brand_select %} ;;
   fields: [ALL_FIELDS*,-order_items.average_spend_per_user]
   view_name: order_items
   from: order_items
