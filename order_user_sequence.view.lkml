@@ -1,5 +1,3 @@
-explore:  order_user_sequence {}
-
 view: order_user_sequence {
   derived_table: {
     sql: select user_id

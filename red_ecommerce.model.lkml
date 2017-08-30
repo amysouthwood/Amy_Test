@@ -9,13 +9,17 @@ datagroup: default {
   max_cache_age: "1 hour"
 }
 
+datagroup: default_2 {
+  max_cache_age: "12 hours"
+}
+
 datagroup: user_facts_etl {
   sql_trigger: SELECT max(ID) FROM etl_jobs ;;
   max_cache_age: "24 hours"
 }
 
 ## model level caching ##
-# persist_with: default
+ persist_with: default
 
 ############# Order Items Explore #################
 explore: order_items {
@@ -60,7 +64,7 @@ explore: order_items {
 
 ############# User Lifetime Order Data #################
 explore: user_lifetime_order {
-#  persist_with: user_facts_etl
+  persist_with: default_2
 #   persist_for: "6 hours"  #### still valid but old way
   description: "User Lifetime Order"
   access_filter: {
