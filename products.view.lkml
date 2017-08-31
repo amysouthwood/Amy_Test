@@ -51,7 +51,7 @@ view: products {
     sql: ${TABLE}.category ;;
     link: {
       label: "Dashboard drill"
-      url: "/dashboards/2?Category={{ value }}"
+      url: "/dashboards/2?Category={{ value | url_encode }}"
     }
     link: {
       label: "Look drill"

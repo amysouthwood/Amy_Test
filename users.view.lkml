@@ -53,6 +53,10 @@ view: users {
         ELSE
         Null
         END;;
+    link: {
+      label: "test"
+      url: "https://localhost:9999/dashboards/1"
+    }
   }
 
   dimension: first_name {
