@@ -17,11 +17,7 @@ view: products {
     sql: ${TABLE}.brand ;;
     drill_fields: [category, name]
     link: {
-      label:  "
-            {% if {{_user_attributes['secure_email']}} = 'Yes' %}
-            Google
-            {% endif %}
-            "
+      label:  "{% if _user_attributes['secure_email'] == 'Yes' %} Google {% endif %}"
       url: "https://www.google.co.uk/#q={{ value }}"
     }
 
