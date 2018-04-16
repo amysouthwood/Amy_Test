@@ -206,6 +206,12 @@ view: user_lifetime_data {
     sql: DATEDIFF(month,${signup_date},CURRENT_DATE) ;;
   }
 
+  dimension: months_since_first_purchase {
+    type: number
+    sql: DATEDIFF(month,${signup_date},${first_order_date}) ;;
+  }
+
+
   dimension: months_since_signup_tier  {
     type: tier
     tiers: [1,2,5,10,30]
@@ -221,6 +227,10 @@ view: user_lifetime_data {
   measure: average_months_since_signup {
     type: average
     sql: ${months_since_signup} ;;
+  }
+
+  measure: user_count {
+    type: count
   }
 
   set: detail {

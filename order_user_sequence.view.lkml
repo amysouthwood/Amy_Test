@@ -11,6 +11,7 @@ view: order_user_sequence {
  ;;
   }
 
+
   measure: count {
     hidden:  yes
     type: count
@@ -95,6 +96,7 @@ view: order_user_sequence {
     type: number
     sql: DATEDIFF(day,${prev_created_at_date},${created_at_date}) ;;
   }
+
 
   measure: average_days_between_orders {
     type: average

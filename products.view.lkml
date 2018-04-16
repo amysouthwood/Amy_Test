@@ -50,12 +50,12 @@ view: products {
     type: string
     sql: ${TABLE}.category ;;
     link: {
-      label: "Dashboard drill"
-      url: "/dashboards/2?Category={{ value | url_encode }}"
+      label: "Drill to User Dashboard"
+      url: "/dashboards/1?Category={{ value | url_encode }}"
     }
     link: {
-      label: "Look drill"
-      url: "/looks/14?f[products.category]={{ value }}"
+      label: "Drill to Top Brands look"
+      url: "/looks/2?f[products.category]={{ value }}"
     }
   }
 
