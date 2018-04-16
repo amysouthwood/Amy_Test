@@ -17,6 +17,10 @@ view: order_user_sequence {
     drill_fields: [detail*]
   }
 
+  measure: average_seq_num {
+    type: average
+    sql: ${sequence_num} ;;
+  }
 
   dimension: user_id {
     hidden: no

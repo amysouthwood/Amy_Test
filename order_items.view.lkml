@@ -3,6 +3,7 @@ view: order_items {
 
   dimension: id {
     primary_key: yes
+    hidden: yes
     type: number
     sql: ${TABLE}.id ;;
   }
@@ -38,11 +39,12 @@ view: order_items {
 
   dimension: inventory_item_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.inventory_item_id ;;
   }
 
   dimension: order_id {
+    hidden: yes
     type: number
     sql: ${TABLE}.order_id ;;
   }
@@ -103,11 +105,13 @@ view: order_items {
   }
 
   measure: order_count {
+    description: "distinct count of orders"
     type: count_distinct
     sql: ${order_id} ;;
   }
 
   measure: user_count {
+    description: "distinct count of users"
     type: count_distinct
     sql: ${user_id} ;;
   }
@@ -189,6 +193,7 @@ dimension: is_prev_30_days {
   measure: total_gross_revenue {
     type: sum
     sql: ${sale_price} ;;
+    value_format_name: usd
     filters: {
       field: returned_date
       value: "NULL"

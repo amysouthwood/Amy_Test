@@ -101,6 +101,7 @@ view: inventory_items {
   measure: total_gross_margin {
     type:  sum
     sql: ${order_items.sale_price} - ${cost} ;;
+    value_format_name: usd
     drill_fields: [products.category, products.brand, total_gross_margin]
   }
 

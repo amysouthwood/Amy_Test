@@ -112,6 +112,14 @@ view: users {
     sql: DATEDIFF(day,${created_date},CURRENT_DATE)<= 90;;
   }
 
+  measure: count_new_users {
+    type: count
+    filters: {
+      field: is_new_users
+      value: "yes"
+    }
+  }
+
 
   dimension: formatted_gender {
     sql: ${TABLE}.gender;;
@@ -154,6 +162,7 @@ view: users {
   measure: avg_spend_per_user {
     type: number
     sql: ${order_items.total_sale_price}/NULLIF(${count},0) ;;
+    value_format_name: usd
     drill_fields: [age_tier,gender,avg_spend_per_user]
   }
 
