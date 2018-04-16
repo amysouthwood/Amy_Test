@@ -9,7 +9,7 @@
     type: field_filter
     explore: redshift_queries
     field: redshift_queries.query
-    default: 0
+#    default: 0
 
   elements:
   - name: time_executing
