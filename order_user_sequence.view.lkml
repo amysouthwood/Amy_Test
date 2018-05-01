@@ -6,6 +6,7 @@ view: order_user_sequence {
       , ROW_NUMBER() Over (Partition by user_id Order by created_at) as sequence_num
       , LAG(created_at) Over( Partition by user_id Order by created_at) as prev_created_at
       , LEAD (created_at) Over( Partition by user_id Order by created_at) as next_created_at
+      , MIN(order_items.created_at) OVER (Partition by user_id) as first_order_at
       from order_items
       group by 1,2,3
  ;;
@@ -48,6 +49,25 @@ view: order_user_sequence {
       year
     ]
     sql: ${TABLE}.created_at ;;
+  }
+
+  dimension_group: first_order_at {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.first_order_at ;;
+  }
+
+  dimension: months_since_first_purchase{
+    type: number
+    sql: DATEDIFF(month,${first_order_at_date},${created_at_date}) ;;
   }
 
   dimension: sequence_num {
@@ -127,6 +147,16 @@ view: order_user_sequence {
   measure: user_count {
     type: count_distinct
     sql: ${user_id} ;;
+  }
+
+  measure: order_count {
+    type: count
+  }
+
+  measure: orders_per_user{
+    type: number
+    sql: 1.0*${order_count}/ NULLIF(${user_count},0) ;;
+    value_format_name: decimal_2
   }
 
 #### Can only be 100% or 0% at the user level, because a user can't have a repeat purchase rate of

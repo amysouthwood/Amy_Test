@@ -206,10 +206,6 @@ view: user_lifetime_data {
     sql: DATEDIFF(month,${signup_date},CURRENT_DATE) ;;
   }
 
-  dimension: months_since_first_purchase {
-    type: number
-    sql: DATEDIFF(month,${signup_date},${first_order_date}) ;;
-  }
 
 
   dimension: months_since_signup_tier  {
