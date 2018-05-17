@@ -8,6 +8,7 @@ include: "*.dashboard"
 
 
 explore: order_items {
+  description: "my order items info"
   from: order_items #required parameter to be able to extend
   view_name: order_items #required parameter to be able to extend
   join: inventory_items {
