@@ -34,6 +34,10 @@ datagroup: null_test {
   sql_trigger: Select CASE WHEN minute(current_timestamp) < 22 THEN 1 ELSE NULL END ;;
 }
 
+datagroup: null_test_2 {
+  sql_trigger: Select CASE WHEN minute(current_timestamp) < 25 THEN 1 END ;;
+}
+
 
 # datagroup: triggers_first_2 {
 #   sql_trigger: select hour(current_timestamp) ;;
