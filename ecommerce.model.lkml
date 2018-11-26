@@ -30,6 +30,10 @@ datagroup: triggers_after_monday {
                where name = 'prod_signal';;
 }
 
+datagroup: null_test {
+  sql_trigger: Select CASE WHEN hour(current_timestamp) = 20 THEN 1 ELSE NULL END ;;
+}
+
 
 # datagroup: triggers_first_2 {
 #   sql_trigger: select hour(current_timestamp) ;;
