@@ -13,6 +13,7 @@ view: products {
   }
 
   dimension: category {
+    label: "Product Category"
     type: string
     sql: ${TABLE}.category ;;
   }

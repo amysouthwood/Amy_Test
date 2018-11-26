@@ -6,21 +6,25 @@ include: "*.view"
 # include all the dashboards
 #include: "*.dashboard"
 
-datagroup: triggers_first_test {
+datagroup: current_date {
+  sql_trigger: select current_date ;;
+}
+
+datagroup: triggers_first {
   sql_trigger: select hour(current_timestamp) ;;
 }
 
-datagroup: triggers_after_test {
+datagroup: triggers_after {
   sql_trigger: select max(id) from sandbox_scratch.smoke_signal where name = 'prod_signal' ;;
 }
 
-datagroup: triggers_after_tues_to_sunday_test {
+datagroup: triggers_after_tues_to_sunday {
   sql_trigger: Select CASE WHEN dayname(current_timestamp) <> 'Monday' THEN  max(id) ELSE NULL END
                From sandbox_scratch.smoke_signal
                where name = 'prod_signal';;
 }
 
-datagroup: triggers_after_monday_test {
+datagroup: triggers_after_monday {
   sql_trigger: Select CASE WHEN dayname(current_timestamp) = 'Monday' THEN  max(id) ELSE NULL END
                From sandbox_scratch.smoke_signal
                where name = 'prod_signal';;
