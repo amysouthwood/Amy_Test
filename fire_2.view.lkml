@@ -15,9 +15,6 @@ view: fire_2 {
 
 view: smoke_signal_2 {
   sql_table_name: sandbox_scratch.smoke_signal_2 ;;
-  dimension: id {
-    sql: ${TABLE}.id ;;
-  }
 
   dimension: name {
     sql: ${TABLE}.name ;;
