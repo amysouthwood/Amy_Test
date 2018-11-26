@@ -6,29 +6,33 @@ include: "*.view"
 # include all the dashboards
 #include: "*.dashboard"
 
-datagroup: current_date {
-  sql_trigger: select current_date ;;
-}
 
 datagroup: triggers_first {
-  sql_trigger: select hour(current_timestamp) ;;
+  sql_trigger: select current_date ;;
 }
 
 datagroup: triggers_after {
   sql_trigger: select max(trigger_at) from sandbox_scratch.smoke_signal where name = 'prod_signal' ;;
 }
 
-# datagroup: triggers_after_tues_to_sunday {
-#   sql_trigger: Select CASE WHEN dayname(current_timestamp) <> 'Monday' THEN  max(id) ELSE NULL END
-#                From sandbox_scratch.smoke_signal
-#                where name = 'prod_signal';;
-# }
-#
-# datagroup: triggers_after_monday {
-#   sql_trigger: Select CASE WHEN dayname(current_timestamp) = 'Monday' THEN  max(id) ELSE NULL END
-#                From sandbox_scratch.smoke_signal
-#                where name = 'prod_signal';;
-# }
+datagroup: triggers_after_tues_to_sunday {
+  sql_trigger: Select CASE WHEN dayname(max(trigger_at)) = 'Monday' THEN  'Sunday'
+                      WHEN dayname(max(trigger_at)) = 'Tuesday' THEN  'Tuesday'
+                      WHEN dayname(max(trigger_at)) = 'Wednesday' THEN  'Wednesday'
+                      WHEN dayname(max(trigger_at)) = 'Thursday' THEN  'Thursday'
+                      WHEN dayname(max(trigger_at)) = 'Friday' THEN  'Friday'
+                      WHEN dayname(max(trigger_at)) = 'Saturday' THEN  'Saturday'
+                      WHEN dayname(max(trigger_at)) = 'Sunday' THEN  'Sunday'
+                      END
+               From sandbox_scratch.smoke_signal
+               where name = 'prod_signal';;
+}
+
+datagroup: triggers_after_monday {
+  sql_trigger: Select  week(max(trigger_at),1)
+               From sandbox_scratch.smoke_signal
+               where name = 'prod_signal';;
+}
 
 
 explore: smoke_signal {}
