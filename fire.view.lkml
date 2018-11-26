@@ -10,9 +10,11 @@ view: fire {
                        ) ;;
     }
   }
-
+}
 #-- if prod — prod_signal
 
+view: smoke_signal {
+  sql_table_name: sandbox_scratch.smoke_signal ;;
   dimension: id {
     sql: ${TABLE}.id ;;
   }

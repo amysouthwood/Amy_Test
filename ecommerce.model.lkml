@@ -14,7 +14,7 @@ datagroup: triggers_after {
   sql_trigger: select max(id) from sandbox_scratch.smoke_signal where name = 'prod_signal' ;;
 }
 
-explore: fire {}
+explore: smoke_signal {}
 
 
 
