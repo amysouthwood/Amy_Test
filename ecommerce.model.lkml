@@ -19,7 +19,7 @@ datagroup: triggers_first_2 {
 }
 
 datagroup: triggers_after_2 {
-  sql_trigger: select max(id) from sandbox_scratch.smoke_signal_2 where name = 'prod_signal' ;;
+  sql_trigger: select count(*) from sandbox_scratch.smoke_signal_2 where name = 'prod_signal' ;;
 }
 
 explore: smoke_signal {}
