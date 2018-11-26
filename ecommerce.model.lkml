@@ -15,28 +15,21 @@ datagroup: triggers_first {
 }
 
 datagroup: triggers_after {
-  sql_trigger: select max(id) from sandbox_scratch.smoke_signal where name = 'prod_signal' ;;
+  sql_trigger: select max(trigger_at) from sandbox_scratch.smoke_signal where name = 'prod_signal' ;;
 }
 
-datagroup: triggers_after_tues_to_sunday {
-  sql_trigger: Select CASE WHEN dayname(current_timestamp) <> 'Monday' THEN  max(id) ELSE NULL END
-               From sandbox_scratch.smoke_signal
-               where name = 'prod_signal';;
-}
+# datagroup: triggers_after_tues_to_sunday {
+#   sql_trigger: Select CASE WHEN dayname(current_timestamp) <> 'Monday' THEN  max(id) ELSE NULL END
+#                From sandbox_scratch.smoke_signal
+#                where name = 'prod_signal';;
+# }
+#
+# datagroup: triggers_after_monday {
+#   sql_trigger: Select CASE WHEN dayname(current_timestamp) = 'Monday' THEN  max(id) ELSE NULL END
+#                From sandbox_scratch.smoke_signal
+#                where name = 'prod_signal';;
+# }
 
-datagroup: triggers_after_monday {
-  sql_trigger: Select CASE WHEN dayname(current_timestamp) = 'Monday' THEN  max(id) ELSE NULL END
-               From sandbox_scratch.smoke_signal
-               where name = 'prod_signal';;
-}
-
-datagroup: null_test {
-  sql_trigger: Select CASE WHEN minute(current_timestamp) < 22 THEN 1 ELSE NULL END ;;
-}
-
-datagroup: null_test_2 {
-  sql_trigger: Select CASE WHEN minute(current_timestamp) < 25 THEN 1 END ;;
-}
 
 explore: smoke_signal {}
 
