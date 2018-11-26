@@ -14,7 +14,16 @@ datagroup: triggers_after {
   sql_trigger: select max(id) from sandbox_scratch.smoke_signal where name = 'prod_signal' ;;
 }
 
+datagroup: triggers_first_2 {
+  sql_trigger: select hour(current_timestamp) ;;
+}
+
+datagroup: triggers_after_2 {
+  sql_trigger: select max(id) from sandbox_scratch.smoke_signal_2 where name = 'prod_signal' ;;
+}
+
 explore: smoke_signal {}
+explore: smoke_signal_2 {}
 
 
 
