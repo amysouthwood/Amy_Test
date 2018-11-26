@@ -31,7 +31,7 @@ datagroup: triggers_after_monday {
 }
 
 datagroup: null_test {
-  sql_trigger: Select CASE WHEN hour(current_timestamp) = 20 THEN 1 ELSE NULL END ;;
+  sql_trigger: Select CASE WHEN hour(current_timestamp) < 18 THEN 1 ELSE NULL END ;;
 }
 
 
