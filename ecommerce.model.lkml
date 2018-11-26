@@ -6,6 +6,17 @@ include: "*.view"
 # include all the dashboards
 #include: "*.dashboard"
 
+datagroup: triggers_first {
+  sql_trigger: select hour(current_timestamp) ;;
+}
+
+datagroup: triggers_after {
+  sql_trigger: select max(id) from sandbox_scratch.smoke_signal where name = 'prod_signal' ;;
+}
+
+explore: fire {}
+
+
 
 explore: order_items {
   description: "my order items info"
