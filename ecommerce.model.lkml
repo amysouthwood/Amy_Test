@@ -11,6 +11,7 @@ datagroup: triggers_first {
   sql_trigger: select current_date ;;
 }
 
+# for testing purposes only
 datagroup: triggers_after {
   sql_trigger: select max(trigger_at) from sandbox_scratch.smoke_signal where name = 'prod_signal' ;;
 }
