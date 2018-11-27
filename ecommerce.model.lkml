@@ -8,7 +8,7 @@ include: "*.view"
 
 
 datagroup: triggers_first {
-  sql_trigger: select hour(current_timestamp) ;;
+  sql_trigger: select current_date ;;
 }
 
 datagroup: triggers_after {
