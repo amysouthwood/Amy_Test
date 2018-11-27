@@ -7,10 +7,11 @@ view: fire {
                       VALUES (
                        -- if dev -- 'dev_signal'
                        -- if prod -- 'prod_signal'
-                      , current_date
+                      , current_timestamp
                        ) ;;
     }
   }
+
 }
 
 view: smoke_signal {
@@ -27,5 +28,5 @@ view: smoke_signal {
 
 # create table sandbox_scratch.smoke_signal (
 #               name varchar(32),
-#               trigger_at date
+#               trigger_at datetime
 #               );
