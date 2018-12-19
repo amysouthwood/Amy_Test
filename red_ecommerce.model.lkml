@@ -1,7 +1,7 @@
 connection: "redlook"
 
 include: "*.view.lkml"         # include all views in this project
-include: "order_*.dashboard.lookml"  # include all dashboards in this project
+#include: "order_*.dashboard.lookml"  # include all dashboards in this project
 
 
 ########### Datagroups ##############
@@ -67,10 +67,10 @@ explore: user_lifetime_order {
   persist_with: default_2
 #   persist_for: "6 hours"  #### still valid but old way
   description: "User Lifetime Order"
-  access_filter: {
-    field: products.brand
-    user_attribute: "brand"
-  }
+#   access_filter: {
+#     field: products.brand
+#     user_attribute: "brand"
+#   }
   view_name: order_items
   from: order_items
   join: users {

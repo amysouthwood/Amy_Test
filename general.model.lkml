@@ -1,7 +1,7 @@
-connection: "redlook"
+
 
 include: "*.view.lkml"         # include all views in this project
-include: "order_*.dashboard.lookml" # include all dashboards in this project
+#include: "order_*.dashboard.lookml" # include all dashboards in this project
 include: "base.model"
 
 # # Select the views that should be a part of this model,
