@@ -36,7 +36,9 @@ datagroup: triggers_after_monday {
 }
 
 
-explore: smoke_signal {}
+explore: smoke_signal {
+  hidden: yes
+}
 
 
 
@@ -72,17 +74,8 @@ explore: order_items {
 
 
 #extended explore example
-explore: extend_order_items {
-  extends: [order_items]
-  join: users {
-    type:  inner
-    sql_on: ${orders.user_id} = ${users.id} ;;
-    relationship: one_to_one
-  }
-}
-
-
-explore: products {
+explore: extend_products {
+  extends: [products]
   conditionally_filter: {
     filters: {
       field: products.category
@@ -90,6 +83,12 @@ explore: products {
     }
     unless: [products.brand]
   }
+}
+
+
+explore: products {
+  view_name: products
+  from: products
 }
 
 
