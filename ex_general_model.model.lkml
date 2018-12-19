@@ -20,6 +20,7 @@ access_grant: sales_specific {
 
 explore: order_items_general {
   extends: [order_items]
+  group_label: "ECOMMERCE GENERAL"
 }
 
 
@@ -27,4 +28,5 @@ explore: users_no_email {
   extends: [users]
   fields: [ALL_FIELDS*
     ,-users.email]
+  group_label: "ECOMMERCE GENERAL"
 }
