@@ -1,5 +1,6 @@
 view: events {
   sql_table_name: demo_db.events ;;
+  required_access_grants: [marketing_specific]
 
   dimension: id {
     primary_key: yes

@@ -6,7 +6,7 @@ include: "*.view"
 # include all the dashboards
 #include: "*.dashboard"
 
-
+############## DATAGROUPS ################
 datagroup: triggers_first {
   sql_trigger: select current_date ;;
 }
@@ -35,13 +35,23 @@ datagroup: triggers_after_monday {
                where name = 'prod_signal';;
 }
 
+############## ACCESS GRANTS ############
+
+access_grant: marketing_specific {
+  user_attribute: department
+  allowed_values: ["marketing"]
+}
+
+access_grant: sales_specific {
+  user_attribute: department
+  allowed_values: ["sales"]
+}
+
+############# EXPLORES ##################
 
 explore: smoke_signal {
   hidden: yes
 }
-
-
-
 
 explore: order_items {
   description: "my order items info"
@@ -66,25 +76,12 @@ explore: order_items {
   }
 
   join: users {
+    required_access_grants: [marketing_specific]
     type: left_outer
     sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_one
   }
 }
-
-
-#extended explore example
-explore: extend_products {
-  extends: [products]
-  conditionally_filter: {
-    filters: {
-      field: products.category
-      value: "Accessories"
-    }
-    unless: [products.brand]
-  }
-}
-
 
 explore: products {
   view_name: products
@@ -108,4 +105,30 @@ explore: users {
 #
 #     }
 #   }
+}
+
+explore: events {}
+
+
+################ EXTENDED EXPLORES ################
+explore: extend_products {
+  extends: [products]
+  conditionally_filter: {
+    filters: {
+      field: products.category
+      value: "Accessories"
+    }
+    unless: [products.brand]
+  }
+}
+
+############# ACCESS GRANTS EXPLORES #############
+explore: marketing_users {
+  view_name: users
+   required_access_grants: [marketing_specific]
+}
+
+explore: sales_users {
+  view_name: users
+  required_access_grants: [sales_specific]
 }

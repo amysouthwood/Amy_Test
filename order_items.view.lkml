@@ -35,11 +35,27 @@ view: order_items {
 
   dimension: sale_price {
     type: number
+    hidden: yes
     sql: ${TABLE}.sale_price ;;
   }
 
   measure: count {
     type: count
     drill_fields: [id, inventory_items.id, orders.id]
+  }
+
+
+# only visible to Marketing
+  measure: average_sale_price {
+    type:  average
+    sql: ${sale_price} ;;
+    required_access_grants: [marketing_specific]
+  }
+
+# only visible to Sales
+  measure: total_sale_price {
+    type:  sum
+    sql: ${sale_price} ;;
+    required_access_grants: [sales_specific]
   }
 }
