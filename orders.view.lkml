@@ -21,6 +21,11 @@ view: orders {
     sql: ${TABLE}.created_at ;;
   }
 
+  measure: min_date {
+    type: date
+    sql: min(${created_date}) ;;
+  }
+
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;

@@ -10,12 +10,22 @@ view: products {
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
+    link: {
+      label: "test"
+      url: "{% if brand._value == 'Calvin Klein' %} www.google.com
+            {% else %} www.bbc.com
+            {% endif %}"
+    }
   }
 
   dimension: category {
     label: "Product Category"
     type: string
     sql: ${TABLE}.category ;;
+    link: {
+      label: "category drill"
+      url: "/dashboards/1?Category={{value}}"
+    }
   }
 
   dimension: department {

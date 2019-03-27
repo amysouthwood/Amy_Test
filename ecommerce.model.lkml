@@ -86,6 +86,11 @@ explore: order_items {
 explore: products {
   view_name: products
   from: products
+  join: pivot_test {
+    type: inner
+    sql_on: ${products.id} = ${pivot_test.id} ;;
+    relationship: one_to_many
+  }
 }
 
 
@@ -107,7 +112,7 @@ explore: users {
 #   }
 }
 
-explore: events {}
+# explore: events {}
 
 
 ################ EXTENDED EXPLORES ################
