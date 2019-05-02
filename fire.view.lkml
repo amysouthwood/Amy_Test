@@ -5,8 +5,8 @@ view: fire {
       sql_step: create table ${SQL_TABLE_NAME} as select 1 ;;
       sql_step: insert into sandbox_scratch.smoke_signal (name, trigger_at)
                       VALUES (
-                       -- if dev -- 'dev_signal'
-                       -- if prod -- 'prod_signal'
+                        if dev -- 'dev_signal'
+                        if prod -- 'prod_signal'
                       , current_timestamp
                        ) ;;
     }

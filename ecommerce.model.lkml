@@ -37,15 +37,7 @@ datagroup: triggers_after_monday {
 
 ############## ACCESS GRANTS ############
 
-access_grant: marketing_specific {
-  user_attribute: department
-  allowed_values: ["marketing"]
-}
 
-access_grant: sales_specific {
-  user_attribute: department
-  allowed_values: ["sales"]
-}
 
 ############# EXPLORES ##################
 

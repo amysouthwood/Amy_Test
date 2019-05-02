@@ -8,6 +8,18 @@ include: "users.view.lkml"                       # include all views in this pro
 
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
+############## ACCESS GRANTS ############
+
+access_grant: marketing_specific {
+  user_attribute: department
+  allowed_values: ["marketing"]
+}
+
+access_grant: sales_specific {
+  user_attribute: department
+  allowed_values: ["sales"]
+}
+
 ############# EXPLORES #################
 explore: order_items {
   from: order_items #required parameter to be able to extend

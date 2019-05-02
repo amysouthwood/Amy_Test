@@ -10,11 +10,15 @@ view: products {
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
+#     link: {
+#       label: "test"
+#       url: "{% if brand._value == 'Calvin Klein' %} www.google.com
+#             {% else %} www.bbc.com
+#             {% endif %}"
+#     }
     link: {
-      label: "test"
-      url: "{% if brand._value == 'Calvin Klein' %} www.google.com
-            {% else %} www.bbc.com
-            {% endif %}"
+      label: "to dashboard"
+      url: "/dashboards/3?Date={{ _filters['orders.created_date'] | url_encode }}&query_timezone=user_timezone"
     }
   }
 

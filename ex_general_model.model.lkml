@@ -1,4 +1,4 @@
-
+connection: "thelook"
 
 include: "order_items.view.lkml"                       # include all views in this project
 include: "inventory_items.view.lkml"                       # include all views in this project
@@ -8,17 +8,7 @@ include: "users.view.lkml"                       # include all views in this pro
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 include: "ex_base_model.model"
 
-############## ACCESS GRANTS ############
 
-access_grant: marketing_specific {
-  user_attribute: department
-  allowed_values: ["marketing"]
-}
-
-access_grant: sales_specific {
-  user_attribute: department
-  allowed_values: ["sales"]
-}
 
 ############ EXPLORES ###########
 
