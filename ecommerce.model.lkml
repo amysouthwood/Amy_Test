@@ -3,9 +3,20 @@ connection: "thelook"
 # include all the views
 include: "*.view"
 
+
 # include all the dashboards
 #include: "*.dashboard"
 
+
+access_grant: marketing_specific {
+  user_attribute: department
+  allowed_values: ["marketing"]
+}
+
+access_grant: sales_specific {
+  user_attribute: department
+  allowed_values: ["sales"]
+}
 ############## DATAGROUPS ################
 datagroup: triggers_first {
   sql_trigger: select current_date ;;

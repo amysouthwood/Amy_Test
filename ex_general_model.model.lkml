@@ -19,8 +19,14 @@ explore: order_items_general {
 
 
 explore: users_no_email {
+  required_access_grants: [sales_specific]
   extends: [users]
   fields: [ALL_FIELDS*
     ,-users.email]
   group_label: "ECOMMERCE GENERAL"
+}
+
+explore: sales_users {
+  extends: [users]
+  required_access_grants: [sales_specific]
 }
