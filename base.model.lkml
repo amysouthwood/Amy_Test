@@ -3,6 +3,18 @@ connection: "thelook_events_redshift"
 include: "*.view.lkml"         # include all views in this project
 #include: "order_*.dashboard.lookml"  # include all dashboards in this project
 
+############## ACCESS GRANTS ############
+
+access_grant: marketing_specific {
+  user_attribute: department
+  allowed_values: ["marketing"]
+}
+
+access_grant: sales_specific {
+  user_attribute: department
+  allowed_values: ["sales"]
+}
+
 
 ############# Order Items Explore #################
 explore: order_items_base {

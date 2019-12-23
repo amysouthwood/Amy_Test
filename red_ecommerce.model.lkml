@@ -4,6 +4,17 @@ include: "*.view.lkml"         # include all views in this project
 #include: "order_*.dashboard.lookml"  # include all dashboards in this project
 
 
+########### Access Grants ############
+access_grant: marketing_specific {
+  user_attribute: department
+  allowed_values: ["marketing"]
+}
+
+access_grant: sales_specific {
+  user_attribute: department
+  allowed_values: ["sales"]
+}
+
 ########### Datagroups ##############
 datagroup: default {
   max_cache_age: "1 hour"
@@ -40,6 +51,7 @@ explore: order_items {
   label: "Order Items"
 
   join: users {
+#     required_access_grants: [marketing_specific]
     type:  inner
     relationship:  many_to_one
     sql_on: ${order_items.user_id} =  ${users.id}  ;;
@@ -170,8 +182,25 @@ explore: products_string {
   }
 }
 
-explore: users {
-  from: users #required parameter to be able to extend
-  view_name: users #required parameter to be able to extend
-  extension: required
+
+
+############# ACCESS GRANTS EXPLORES #############
+explore: marketing_users {
+  view_name: users
+  required_access_grants: [marketing_specific]
+  join: order_items {
+    type: left_outer
+    sql_on: ${users.id} = ${order_items.user_id} ;;
+    relationship: one_to_many
+  }
+}
+
+explore: sales_users {
+  view_name: users
+  required_access_grants: [sales_specific]
+  join: order_items {
+    type: left_outer
+    sql_on: ${users.id} = ${order_items.user_id} ;;
+    relationship: one_to_many
+  }
 }

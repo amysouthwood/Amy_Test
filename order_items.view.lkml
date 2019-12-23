@@ -224,6 +224,20 @@ dimension: is_prev_30_days {
     sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
   }
 
+# only visible to Marketing
+  measure: ag_average_sale_price {
+    type:  average
+    sql: ${sale_price} ;;
+    required_access_grants: [marketing_specific]
+  }
+
+# only visible to Sales
+  measure: ag_total_sale_price {
+    type:  sum
+    sql: ${sale_price} ;;
+    required_access_grants: [sales_specific]
+  }
+
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
