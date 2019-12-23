@@ -1,4 +1,4 @@
-connection: "redlook"
+connection: "thelook_events_redshift"
 case_sensitive: no
 
 include: "redshift_*.dashboard"

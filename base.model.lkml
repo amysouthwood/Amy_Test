@@ -1,4 +1,4 @@
-connection: "redlook"
+connection: "thelook_events_redshift"
 
 include: "*.view.lkml"         # include all views in this project
 #include: "order_*.dashboard.lookml"  # include all dashboards in this project
