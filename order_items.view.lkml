@@ -253,18 +253,4 @@ dimension: is_prev_30_days {
     ]
   }
 
-
-# only visible to Marketing
-  measure: average_sale_price {
-    type:  average
-    sql: ${sale_price} ;;
-    required_access_grants: [marketing_specific]
-  }
-
-# only visible to Sales
-  measure: total_sale_price {
-    type:  sum
-    sql: ${sale_price} ;;
-    required_access_grants: [sales_specific]
-  }
 }
