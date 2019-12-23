@@ -149,6 +149,24 @@ dimension: is_prev_30_days {
   ;;
 }
 
+  filter: bill_input_date{
+    type: date
+  }
+
+  dimension: number_days_from_input {
+    type: number
+    sql: DATEDIFF(day,{% date_start bill_input_date %},${order_created_date}) ;;
+  }
+
+  parameter: bill_input_date2 {
+    type: date
+  }
+
+  dimension: number_days_from_input_2 {
+    type: number
+    sql: DATEDIFF(day,{% parameter bill_input_date2 %},${order_created_date}) ;;
+  }
+
 
   measure: 30_day_total_sale_price {
     type: sum

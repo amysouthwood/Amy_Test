@@ -21,6 +21,17 @@ datagroup: user_facts_etl {
 ## model level caching ##
  persist_with: default
 
+# if the brand_select filter only field is in the query then apply filter to the product_category based on the value of the brand_select
+# otheriwse do not filter
+explore: products {
+  sql_always_where:
+    1=1 {% if products.brand_select._is_filtered %}
+  and ${products.category} in (select ${products.category} from ${products.SQL_TABLE_NAME} as products where {% condition products.brand_select %} ${products.brand} {% endcondition %})
+  {%endif%}
+  ;;
+
+  }
+
 ############# Order Items Explore #################
 explore: order_items {
 #  sql_always_where: ${order_created_date} >= '2017-01-01';;

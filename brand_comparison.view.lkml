@@ -59,5 +59,34 @@ filter: category_select {
             END;;
   }
 
+  dimension: category_comparitor {
+    description: "Compare a selected brand vs other brands in the category"
+    sql: Case When {% condition brand_select %} brand {% endcondition %}
+            THEN concat('  ',${brand})
+            ELSE ${brand}
+            END;;
+    html: {% if value contains '  ' %}
+          <p style="color: black; background-color: lightblue">{{ rendered_value }}</p>
+          {% else %} {{ rendered_value }}
+          {% endif %}
+                  ;;
+  }
+
+  dimension: category_comparitor_2 {
+    description: "Compare a selected brand vs other brands in the category"
+    sql: Case When {% condition brand_select %} brand {% endcondition %}
+            THEN concat('  ',${brand})
+            ELSE 'All other brands'
+            END;;
+    html:
+    <a href="#drillmenu" target="_self">
+    {% if value contains '  ' %}
+    <p style="background-color: lightblue">{{ rendered_value }}</p>
+    {% else %} {{ rendered_value }}
+    {% endif %}
+    </a>
+    ;;
+    drill_fields: [brand, count]
+  }
 
 }

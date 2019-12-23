@@ -38,6 +38,9 @@ view: products {
 # #    html: <a href="/dashboards/250?Brand={{ value }}">{{ value }}</a> ;; ## example syntax for dashboard
 # #    html: <a href="/explore/Amy_test/user_lifetime_data?fields=user_lifetime_data.order_cnt,products.brand&f[user_lifetime_data.is_repeat_customer]=Yes&f[products.brand]={{ value }}">{{ value }}</a> ;;  ## example syntax for explore
 
+# documentation:
+  # _filters and custom drill:https://help.looker.com/hc/en-us/articles/360001288228-Custom-Drilling-Using-HTML-and-Link
+  # liquid defnition: https://docs.looker.com/reference/liquid-variables
   }
 
   dimension: brand_link {
@@ -99,6 +102,46 @@ view: products {
   measure: count {
     type: count
     drill_fields: [id, name, inventory_items.count]
+  }
+
+# Allows you to select a brand with out adding the brand as a regular filter and affecting the where clause
+  filter: brand_select {
+    description: "use this for comparitor fields only"
+    suggest_dimension: brand
+    type: string
+  }
+
+# If the brand value in the brand dimension matches the brand value in the brand_select then concatenate a space else display brand values
+  dimension: category_comparitor {
+    description: "Compare a selected brand vs other brands in the category"
+    sql: Case When {% condition brand_select %} brand {% endcondition %}
+            THEN concat('  ',${brand})
+            ELSE ${brand}
+            END;;
+    html: {% if value contains '  ' %}
+          <p style="color: black; background-color: lightblue">{{ rendered_value }}</p>
+          {% else %} {{ rendered_value }}
+          {% endif %}
+                  ;;
+  }
+
+# If the brand value in the brand dimension matches the brand value in the brand_select then concatenate a space else group the other brands into "All other brands"
+# Add drill_field to allow users to click on "All other brands" to drill to the brands that make up that grouping
+  dimension: category_comparitor_2 {
+    description: "Compare a selected brand vs other brands in the category"
+    sql: Case When {% condition brand_select %} brand {% endcondition %}
+            THEN concat('  ',${brand})
+            ELSE ${category}
+            END;;
+    html:
+    <a href="#drillmenu" target="_self">
+    {% if value contains '  ' %}
+    <p style="background-color: lightblue">{{ rendered_value }}</p>
+    {% else %} {{ rendered_value }}
+    {% endif %}
+    </a>
+    ;;
+    drill_fields: [brand, count]
   }
 
 }
