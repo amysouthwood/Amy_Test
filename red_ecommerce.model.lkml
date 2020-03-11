@@ -6,6 +6,8 @@ include: "*.view.lkml"         # include all views in this project
 aggregate_awareness: yes
 
 
+
+
 ########### Access Grants ############
 access_grant: marketing_specific {
   user_attribute: department
@@ -74,12 +76,16 @@ explore: products {
   }
 
 ############# Order Items Explore #################
-explore: order_items {
+
 #  sql_always_where: ${order_created_date} >= '2017-01-01';;
 #  sql_always_having: ${total_sale_price} > 100 ;;
+explore: order_items {
   description: "Detailed order information"
   label: "Order Items"
-
+  access_filter: {
+    field: products.brand
+    user_attribute: brand
+  }
   join: users {
 #     required_access_grants: [marketing_specific]
     type:  inner
@@ -218,6 +224,8 @@ explore: products_string {
 explore: marketing_users {
   view_name: users
   required_access_grants: [marketing_specific]
+  fields: [ALL_FIELDS*,-users.avg_spend_per_user
+    ,-users.count_users_returned]
   join: order_items {
     type: left_outer
     sql_on: ${users.id} = ${order_items.user_id} ;;
@@ -228,6 +236,8 @@ explore: marketing_users {
 explore: sales_users {
   view_name: users
   required_access_grants: [sales_specific]
+  fields: [ALL_FIELDS*,-users.avg_spend_per_user
+    ,-users.count_users_returned]
   join: order_items {
     type: left_outer
     sql_on: ${users.id} = ${order_items.user_id} ;;

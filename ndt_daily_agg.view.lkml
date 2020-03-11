@@ -7,6 +7,10 @@ view: ndt_daily_agg {
       column: total_sale_price {}
       column: order_count {}
       column: total_gross_revenue {}
+      filters: {
+        field: order_items.order_created_date
+        value: "2 years"
+      }
     }
   }
   dimension: order_created_date {

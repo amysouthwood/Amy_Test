@@ -47,5 +47,7 @@ join: products {
 explore: users {
   from: users #required parameter to be able to extend
   view_name: users #required parameter to be able to extend
+  fields: [ALL_FIELDS*,-users.avg_spend_per_user
+    ,-users.count_users_returned]
   extension: required
 }
