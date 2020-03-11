@@ -24,6 +24,7 @@ view: orders_base {
       year
     ]
     sql: ${TABLE}.created_at ;;
+    drill_fields: [status]
   }
 
 

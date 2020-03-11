@@ -11,10 +11,10 @@ include: "/customisation_example/customisation_group_a.dashboard.lookml"   # inc
 explore: orders {
   from: orders_group_a
 # limits to set group of users/customers for whom the explore is relevant. This is optional as the access filter will apply the row level security.
-  sql_always_where: ${user_id} in (1,2,3) ;;
+  # sql_always_where: ${user_id} in (1,2,3) ;;
 # applies row level security so that customers only see their data
-  access_filter: {
-    field: user_id
-    user_attribute: user_id
-    }
+  # access_filter: {
+  #   field: user_id
+  #   user_attribute: user_id
+  #   }
 }
