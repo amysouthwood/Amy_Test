@@ -102,6 +102,11 @@ view: products {
     sql: ${retail_price} ;;
   }
 
+  measure: total_price {
+    type: sum
+    sql: ${retail_price} ;;
+  }
+
   measure: count {
     type: count
     drill_fields: [id, name, inventory_items.count]
@@ -148,4 +153,41 @@ view: products {
     drill_fields: [brand, count]
   }
 
+}
+
+view: agg_test {
+  derived_table: {
+    sql: SELECT {% parameter dimension_select %} as dimension, sum(retail_price) as agg_price
+         FROM public.products
+         Group by 1;;
+  }
+
+  dimension: dimension {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.dimension ;;
+  }
+
+  dimension: agg_price {
+    type: number
+    hidden: yes
+    sql: ${TABLE}.agg_price ;;
+  }
+
+  measure: total_agg_price {
+    type: sum
+    sql: ${agg_price} ;;
+  }
+
+  parameter: dimension_select {
+    type: unquoted
+    allowed_value: {
+      label: "brand"
+      value: "products.brand"
+    }
+    allowed_value: {
+      label: "category"
+      value: "products.category"
+    }
+  }
 }

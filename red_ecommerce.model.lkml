@@ -3,7 +3,7 @@ connection: "thelook_events_redshift"
 include: "*.view.lkml"         # include all views in this project
 #include: "order_*.dashboard.lookml"  # include all dashboards in this project
 
-aggregate_awareness: yes
+# aggregate_awareness: yes
 
 
 
@@ -21,6 +21,7 @@ access_grant: sales_specific {
 
 ########### Datagroups ##############
 datagroup: default {
+  sql_trigger: select current_date ;;
   max_cache_age: "1 hour"
 }
 
@@ -82,10 +83,44 @@ explore: products {
 explore: order_items {
   description: "Detailed order information"
   label: "Order Items"
-  access_filter: {
-    field: products.brand
-    user_attribute: brand
+  aggregate_table: rollup__order_created_date {
+    query: {
+      dimensions: [
+        order_created_date]
+      measures: [total_gross_revenue, total_sale_price]
+      timezone: "America/Los_Angeles"
+    }
+
+    materialization: {
+      datagroup_trigger: default
+    }
   }
+
+  aggregate_table: rollup__order_created_date__products_category {
+    query: {
+      dimensions: [order_created_date, products.category]
+      measures: [total_gross_revenue, total_sale_price]
+      timezone: "America/Los_Angeles"
+    }
+
+    materialization: {
+      datagroup_trigger: default
+    }
+  }
+
+
+#   access_filter: {
+#     field: products.brand
+#     user_attribute: brand
+#   }
+#   sql_always_where:
+#       {% if order_items.returned_date._in_query or order_items.returned_year._in_query %}
+#         ${returned_date} IS NOT NULL
+#       {% elsif order_items.delivered_date._in_query or order_items.delivered_year._in_query %}
+#         ${delivered_date} IS NOT NULL
+#       {% else %}
+#         1=1
+#       {% endif %} ;;
   join: users {
 #     required_access_grants: [marketing_specific]
     type:  inner
@@ -104,6 +139,7 @@ explore: order_items {
     relationship: many_to_one
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
   }
+  join: parameters {}
 
 #   always_filter: {
 #     filters: {
@@ -244,3 +280,19 @@ explore: sales_users {
     relationship: one_to_many
   }
 }
+
+##################
+explore: agg_products_test {
+  view_name: products
+  join: agg_test {
+    type: left_outer
+    relationship: many_to_one
+    sql_on: {% if agg_test.dimension_select._parameter_value == 'products.brand' %} ${products.brand} = ${agg_test.dimension}
+            {% elsif agg_test.dimension_select._parameter_value == 'products.category' %} ${products.category} = ${agg_test.dimension}
+            {% endif %}
+     ;;
+
+  }
+}
+
+########################

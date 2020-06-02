@@ -37,6 +37,40 @@ view: order_items {
     sql: ${TABLE}.delivered_at ;;
   }
 
+  dimension: days_to_return{
+    type: yesno
+    sql: datediff('day',${order_created_date},${returned_date}) <=7 ;;
+  }
+
+  dimension_group: time_to_delivery {
+    type: duration
+    sql_start: ${order_created_raw} ;;
+    sql_end: ${delivered_raw} ;;
+    intervals: [day,hour,minute,second]
+  }
+
+  measure: average_time_to_devliery {
+    type: number
+    sql: ${seconds_time_to_delivery}/86400.0 ;;
+    value_format: "DD:HH:MM:SS"
+  }
+
+
+
+  dimension: created_range {
+    type: date
+    sql: CASE WHEN ${order_created_date} > DATEADD(day, -30, {% date_end order_created_date %})
+         AND ${order_created_date} <= {% date_end order_created_date %} THEN ${order_created_date} END ;;
+    convert_tz: no
+  }
+
+  dimension: created_end {
+    type: date
+    sql: DATEADD(day, -30, {% date_end order_created_date %}) ;;
+  }
+
+
+
   dimension: inventory_item_id {
     type: number
     hidden: yes
@@ -60,8 +94,10 @@ view: order_items {
       quarter,
       year
     ]
-    sql: ${TABLE}.returned_at ;;
+    sql: ${TABLE}.returned_at;;
   }
+
+
 
   dimension: is_returned {
     type: yesno
