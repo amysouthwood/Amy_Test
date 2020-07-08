@@ -107,6 +107,16 @@ explore: order_items {
       datagroup_trigger: default
     }
   }
+  sql_always_having: {% if order_items.apply_having_filter._is_filtered %}
+                        {% if order_items.apply_having_filter._parameter_value == "'yes'" %}
+                          ${average_sale_price} > 0 OR ${total_gross_revenue} > 0
+                        {% else %}
+                          1=1
+                        {% endif %}
+                    {% else %}
+                    1=1
+                    {% endif %}
+  ;;
 
 
 #   access_filter: {
@@ -296,3 +306,13 @@ explore: agg_products_test {
 }
 
 ########################
+# example PoP with refinements
+
+explore: period_over_period {
+  view_name: order_items_simple
+  join: dates {
+    type: left_outer
+    sql_on: ${order_items_simple.created_raw} = ${dates.date_raw} ;;
+    relationship: many_to_one
+  }
+}

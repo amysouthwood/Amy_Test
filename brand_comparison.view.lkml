@@ -35,6 +35,7 @@ filter: brand_select {
   type: string
 }
 
+
 filter: category_select {
   suggest_dimension: category
   type: string

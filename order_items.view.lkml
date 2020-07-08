@@ -255,6 +255,17 @@ dimension: is_prev_30_days {
     }
   }
 
+  parameter: apply_having_filter {
+    type: string
+    default_value: "no"
+    allowed_value: {
+      value: "yes"
+    }
+    allowed_value: {
+      value: "no"
+    }
+  }
+
   measure: average_spend_per_user {
     type: number
     value_format_name: usd
@@ -287,6 +298,10 @@ dimension: is_prev_30_days {
       total_sale_price
 
     ]
+  }
+
+  set: pop {
+    fields: [status, order_count, total_sale_price]
   }
 
 }

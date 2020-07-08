@@ -16,10 +16,19 @@ view: products {
     type: string
     sql: ${TABLE}.brand ;;
     drill_fields: [category, name]
-    link: {
-      label:  "{% if _user_attributes['secure_email'] == 'Yes' %} Google {% endif %}"
-      url: "https://www.google.co.uk/#q={{ value }}"
-    }
+    html: {% if products.name._is_selected %}
+    <a href="/looks/608?f[products.brand]={{ value }}">{{ value }}</a>
+    {% else %}
+    <a href="/looks/512?f[products.brand]={{ value }}">{{ value }}</a>
+    {% endif %}
+    ;;
+
+
+
+#     link: {
+#       label:  "{% if _user_attributes['secure_email'] == 'Yes' %} Google {% endif %}"
+#       url: "https://www.google.co.uk/#q={{ value }}"
+#     }
 
 #     link: {
 #       label: "website link"
@@ -79,6 +88,10 @@ view: products {
   }
 
 
+  parameter: price_param {
+    type: number
+  }
+
 
   dimension: retail_price {
     #hidden: yes
@@ -116,7 +129,7 @@ view: products {
 # Allows you to select a brand with out adding the brand as a regular filter and affecting the where clause
   filter: brand_select {
     description: "use this for comparitor fields only"
-    suggest_dimension: brand
+    suggest_dimension: products.brand
     type: string
   }
 
