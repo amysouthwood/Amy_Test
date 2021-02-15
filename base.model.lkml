@@ -3,7 +3,7 @@ connection: "thelook_events_redshift"
 include: "*.view.lkml"         # include all views in this project
 #include: "order_*.dashboard.lookml"  # include all dashboards in this project
 
-# adding a comment
+# adding a comment2
 
 ############## ACCESS GRANTS ############
 
