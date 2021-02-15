@@ -1,4 +1,4 @@
-explore: pop_static_union {}
+
 
 view: pop_static_union {
   derived_table: {
