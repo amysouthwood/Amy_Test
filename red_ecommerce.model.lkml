@@ -19,6 +19,7 @@ access_grant: sales_specific {
   allowed_values: ["sales"]
 }
 
+
 ########### Datagroups ##############
 datagroup: default {
   sql_trigger: select current_date ;;

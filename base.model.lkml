@@ -50,4 +50,10 @@ explore: users {
   fields: [ALL_FIELDS*,-users.avg_spend_per_user
     ,-users.count_users_returned]
   extension: required
+  join: order_items {
+    type: left_outer
+    sql_on:  ${order_items.user_id} =  ${users.id} ;;
+    relationship: one_to_many
+  }
+
 }

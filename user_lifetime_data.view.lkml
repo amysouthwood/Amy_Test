@@ -16,7 +16,7 @@ view: user_lifetime_data {
       group by order_items.user_id, users.gender, users.age, users.created_at)
        ;;
 #     datagroup_trigger: user_facts_etl
-#     sql_trigger_value: Select CURRENT_DATE ;; ### still valid but old way
+# sql_trigger_value: Select CURRENT_DATE ;; ### still valid but old way
 #     sortkeys: ["user_id"]
 #     distribution_style: all
   }

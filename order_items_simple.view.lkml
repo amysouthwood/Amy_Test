@@ -119,6 +119,13 @@ view: order_items_simple {
     sql: ${sale_price} ;;
   }
 
+  measure: total_revenue {
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price} ;;
+    filters: [returned_date: "-NULL"]
+  }
+
 # Filtered PoP measures
 
   measure: current_period_sales {
