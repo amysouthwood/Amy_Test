@@ -166,7 +166,7 @@ view: order_user_sequence {
   measure: 60_day_repeat_purchase_rate {
     type: number
     sql:  1.0 * ${60_day_repeat_purchase_count}/NULLIF(${user_count},0) ;;
-    value_format: "#.0000,-#.0000"
+    value_format_name: decimal_2
   }
 
   set: detail {

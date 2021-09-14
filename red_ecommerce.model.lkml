@@ -77,47 +77,69 @@ explore: products {
 
   }
 
+#################################################################################
 ############# Order Items Explore #################
 
-#  sql_always_where: ${order_created_date} >= '2017-01-01';;
-#  sql_always_having: ${total_sale_price} > 100 ;;
+
 explore: order_items {
-  description: "Detailed order information"
+  description: "Detailed order information for the last 3 years"
   label: "Order Items"
-  aggregate_table: rollup__order_created_date {
-    query: {
-      dimensions: [
-        order_created_date]
-      measures: [total_gross_revenue, total_sale_price]
-      timezone: "America/Los_Angeles"
-    }
-
-    materialization: {
-      datagroup_trigger: default
-    }
+  join: users {
+    type:  inner
+    relationship:  many_to_one
+    sql_on: ${order_items.user_id} =  ${users.id}  ;;
+  }
+  join: inventory_items {
+    type: inner
+    relationship: many_to_one
+    sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
   }
 
-  aggregate_table: rollup__order_created_date__products_category {
-    query: {
-      dimensions: [order_created_date, products.category]
-      measures: [total_gross_revenue, total_sale_price]
-      timezone: "America/Los_Angeles"
-    }
-
-    materialization: {
-      datagroup_trigger: default
-    }
+  join: products {
+    type:inner
+    relationship: many_to_one
+    sql_on: ${inventory_items.product_id} = ${products.id} ;;
   }
-  sql_always_having: {% if order_items.apply_having_filter._is_filtered %}
-                        {% if order_items.apply_having_filter._parameter_value == "'yes'" %}
-                          ${average_sale_price} > 0 OR ${total_gross_revenue} > 0
-                        {% else %}
-                          1=1
-                        {% endif %}
-                    {% else %}
-                    1=1
-                    {% endif %}
-  ;;
+
+###################################################################################
+
+  # join: parameters {}
+  # aggregate_table: rollup__order_created_date {
+  #   query: {
+  #     dimensions: [
+  #       order_created_date]
+  #     measures: [total_gross_revenue, total_sale_price]
+  #     timezone: "America/Los_Angeles"
+  #   }
+
+  #   materialization: {
+  #     datagroup_trigger: default
+  #   }
+  # }
+
+  # aggregate_table: rollup__order_created_date__products_category {
+  #   query: {
+  #     dimensions: [order_created_date, products.category]
+  #     measures: [total_gross_revenue, total_sale_price]
+  #     timezone: "America/Los_Angeles"
+  #   }
+
+  #   materialization: {
+  #     datagroup_trigger: default
+  #   }
+  # }
+  # sql_always_having: {% if order_items.apply_having_filter._is_filtered %}
+  #                       {% if order_items.apply_having_filter._parameter_value == "'yes'" %}
+  #                         ${average_sale_price} > 0 OR ${total_gross_revenue} > 0
+  #                       {% else %}
+  #                         1=1
+  #                       {% endif %}
+  #                   {% else %}
+  #                   1=1
+  #                   {% endif %}
+  # ;;
+  #  sql_always_where: ${order_created_date} >= '2017-01-01';;
+  #  sql_always_having: ${total_sale_price} > 100 ;;
 
 
 #   access_filter: {
@@ -132,25 +154,7 @@ explore: order_items {
 #       {% else %}
 #         1=1
 #       {% endif %} ;;
-  join: users {
-#     required_access_grants: [marketing_specific]
-    type:  inner
-    relationship:  many_to_one
-    sql_on: ${order_items.user_id} =  ${users.id}  ;;
-  }
 
-  join: inventory_items {
-    type: inner
-    relationship: many_to_one
-    sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
-  }
-
-  join: products {
-    type:inner
-    relationship: many_to_one
-    sql_on: ${inventory_items.product_id} = ${products.id} ;;
-  }
-  join: parameters {}
 
 #   always_filter: {
 #     filters: {
@@ -168,8 +172,20 @@ explore: order_items {
 
 }
 
+# This is a set example query -- I can't remember why this would be used
+# explore: +order_items {
+#   query: order_count_by_month {
+#     description: "Number of orders placed by month in 2019"
+#     label: "Monthly Order for 2019"
+#     dimensions: [order_items.order_created_month]
+#     measures: [order_items.count]
+#     filters: [order_items.order_created_date: "2019"]
+#   }
+# }
+
 ############# User Lifetime Order Data #################
 explore: user_lifetime_order {
+  fields: [ALL_FIELDS*, -inventory_items.id, -users.id]
   persist_with: default_2
 #   persist_for: "6 hours"  #### still valid but old way
   description: "User Lifetime Order"
@@ -208,6 +224,7 @@ explore: user_lifetime_order {
     relationship: many_to_one
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
   }
+
 
 }
 

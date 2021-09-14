@@ -14,8 +14,10 @@ view: order_items {
       raw,
       time,
       date,
+      day_of_week,
       week,
       month,
+      month_num,
       quarter,
       year
     ]
@@ -37,9 +39,11 @@ view: order_items {
     sql: ${TABLE}.delivered_at ;;
   }
 
-  dimension: days_to_return{
-    type: yesno
-    sql: datediff('day',${order_created_date},${returned_date}) <=7 ;;
+  dimension_group: to_return {
+    type: duration
+    intervals: [day]
+    sql_start: ${order_created_date} ;;
+    sql_end: ${returned_date} ;;
   }
 
   dimension_group: time_to_delivery {
@@ -57,17 +61,17 @@ view: order_items {
 
 
 
-  dimension: created_range {
-    type: date
-    sql: CASE WHEN ${order_created_date} > DATEADD(day, -30, {% date_end order_created_date %})
-         AND ${order_created_date} <= {% date_end order_created_date %} THEN ${order_created_date} END ;;
-    convert_tz: no
-  }
+  # dimension: created_range {
+  #   type: date
+  #   sql: CASE WHEN ${order_created_date} > DATEADD(day, -30, {% date_end order_created_date %})
+  #       AND ${order_created_date} <= {% date_end order_created_date %} THEN ${order_created_date} END ;;
+  #   convert_tz: no
+  # }
 
-  dimension: created_end {
-    type: date
-    sql: DATEADD(day, -30, {% date_end order_created_date %}) ;;
-  }
+  # dimension: created_end {
+  #   type: date
+  #   sql: DATEADD(day, -30, {% date_end order_created_date %}) ;;
+  # }
 
 
 
@@ -165,77 +169,77 @@ view: order_items {
   }
 
 
-  dimension: is_30_days_new {
-    type: yesno
-    sql: ${order_created_raw} >= {% date_start start_date_filter %} ;;
-  }
+#   dimension: is_30_days_new {
+#     type: yesno
+#     sql: ${order_created_raw} >= {% date_start start_date_filter %} ;;
+#   }
 
-filter: start_date_filter{
-  type: date
-}
+# filter: start_date_filter{
+#   type: date
+# }
 
-  dimension: is_30_days {
-    type: yesno
-    sql: ${order_created_raw} > DATEADD(day,-29,{% date_start start_date_filter %}) ;;
-  }
+#   dimension: is_30_days {
+#     type: yesno
+#     sql: ${order_created_raw} > DATEADD(day,-29,{% date_start start_date_filter %}) ;;
+#   }
 
-dimension: is_prev_30_days {
-  type: yesno
-  sql: ${order_created_raw} <= DATEADD(day,-29,{% date_start start_date_filter %})
-      AND ${order_created_raw} > DATEADD(day,-59,{% date_start start_date_filter %})
-  ;;
-}
+# dimension: is_prev_30_days {
+#   type: yesno
+#   sql: ${order_created_raw} <= DATEADD(day,-29,{% date_start start_date_filter %})
+#       AND ${order_created_raw} > DATEADD(day,-59,{% date_start start_date_filter %})
+#   ;;
+# }
 
-  filter: bill_input_date{
-    type: date
-  }
+  # filter: bill_input_date{
+  #   type: date
+  # }
 
-  dimension: number_days_from_input {
-    type: number
-    sql: DATEDIFF(day,{% date_start bill_input_date %},${order_created_date}) ;;
-  }
+  # dimension: number_days_from_input {
+  #   type: number
+  #   sql: DATEDIFF(day,{% date_start bill_input_date %},${order_created_date}) ;;
+  # }
 
-  parameter: bill_input_date2 {
-    type: date
-  }
+  # parameter: bill_input_date2 {
+  #   type: date
+  # }
 
-  dimension: number_days_from_input_2 {
-    type: number
-    sql: DATEDIFF(day,{% parameter bill_input_date2 %},${order_created_date}) ;;
-  }
+  # dimension: number_days_from_input_2 {
+  #   type: number
+  #   sql: DATEDIFF(day,{% parameter bill_input_date2 %},${order_created_date}) ;;
+  # }
 
 
-  measure: 30_day_total_sale_price {
-    type: sum
-    value_format_name: usd
-    sql: ${sale_price};;
-    filters: {
-      field: is_30_days
-      value: "yes"
-    }
-}
+#   measure: 30_day_total_sale_price {
+#     type: sum
+#     value_format_name: usd
+#     sql: ${sale_price};;
+#     filters: {
+#       field: is_30_days
+#       value: "yes"
+#     }
+# }
 
-  measure: Prev_30_day_total_sale_price_start {
-    type: sum
-    value_format_name: usd
-    sql: ${sale_price};;
-    filters: {
-      field: is_prev_30_days
-      value: "yes"
-    }
-  }
-  dimension: reporting_period {
-    sql: CASE
-        WHEN datediff(day,${order_created_raw},current_date) < 30
-        THEN 'Last 30 days'
+#   measure: Prev_30_day_total_sale_price_start {
+#     type: sum
+#     value_format_name: usd
+#     sql: ${sale_price};;
+#     filters: {
+#       field: is_prev_30_days
+#       value: "yes"
+#     }
+#   }
+  # dimension: reporting_period {
+  #   sql: CASE
+  #       WHEN datediff(day,${order_created_raw},current_date) < 30
+  #       THEN 'Last 30 days'
 
-        WHEN datediff(day,${order_created_raw},current_date) >= 30
-        and datediff(day,${order_created_raw},current_date) < 60
-        THEN 'Previous Last 30 days'
+  #       WHEN datediff(day,${order_created_raw},current_date) >= 30
+  #       and datediff(day,${order_created_raw},current_date) < 60
+  #       THEN 'Previous Last 30 days'
 
-      END
-       ;;
-  }
+  #     END
+  #     ;;
+  # }
 
 
   measure: average_sale_price {
@@ -255,16 +259,16 @@ dimension: is_prev_30_days {
     }
   }
 
-  parameter: apply_having_filter {
-    type: string
-    default_value: "no"
-    allowed_value: {
-      value: "yes"
-    }
-    allowed_value: {
-      value: "no"
-    }
-  }
+  # parameter: apply_having_filter {
+  #   type: string
+  #   default_value: "no"
+  #   allowed_value: {
+  #     value: "yes"
+  #   }
+  #   allowed_value: {
+  #     value: "no"
+  #   }
+  # }
 
   measure: average_spend_per_user {
     type: number
@@ -272,19 +276,19 @@ dimension: is_prev_30_days {
     sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
   }
 
-# only visible to Marketing
-  measure: ag_average_sale_price {
-    type:  average
-    sql: ${sale_price} ;;
-    required_access_grants: [marketing_specific]
-  }
+# # only visible to Marketing
+#   measure: ag_average_sale_price {
+#     type:  average
+#     sql: ${sale_price} ;;
+#     required_access_grants: [marketing_specific]
+#   }
 
-# only visible to Sales
-  measure: ag_total_sale_price {
-    type:  sum
-    sql: ${sale_price} ;;
-    required_access_grants: [sales_specific]
-  }
+# # only visible to Sales
+#   measure: ag_total_sale_price {
+#     type:  sum
+#     sql: ${sale_price} ;;
+#     required_access_grants: [sales_specific]
+#   }
 
   # ----- Sets of fields for drilling ------
   set: detail {

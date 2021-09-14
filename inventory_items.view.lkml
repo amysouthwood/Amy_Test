@@ -115,4 +115,8 @@ view: inventory_items {
     sql: ${total_gross_margin}/NULLIF(${order_items.total_gross_revenue},0) ;;
     value_format: "0.0%;-0.0%"
   }
+
+  set: excluded_list {
+    fields: [id, users.id]
+  }
 }
